@@ -1,0 +1,6 @@
+{
+  "name": "UniClub - 대학생 동아리 선택 및 지원서 관리 플랫폼",
+  "description": "다양한 대학생 동아리를 탐색하고 맞춤형 지원서를 작성·제출하며 실시간 선발 현황을 관리하는 올인원 플랫폼",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

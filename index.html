@@ -1,0 +1,694 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UniClub - 대학생 동아리 선택 및 지원서 관리 플랫폼</title>
+    <meta name="description" content="전국 대학생 동아리 탐색, 맞춤형 온라인 지원서 작성, 실시간 합격 관리 시스템" />
+    <meta property="og:title" content="UniClub - 대학생 동아리 선택 및 지원서 관리 플랫폼" />
+    <meta property="og:description" content="전국 대학생 동아리 탐색, 맞춤형 온라인 지원서 작성, 실시간 합격 관리 시스템" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <!-- 상단 네비게이션 헤더 -->
+    <header class="site-header">
+      <div class="header-container">
+        <div class="brand-logo" id="navLogo">
+          <div class="brand-icon">🎓</div>
+          <div class="brand-text">
+            <span class="brand-title">UniClub</span>
+            <span class="brand-subtitle">대학생 동아리 & 지원서 관리</span>
+          </div>
+        </div>
+
+        <nav class="nav-links">
+          <button class="nav-btn active" data-tab="tab-explore">
+            <span class="nav-icon">🔍</span> 동아리 탐색
+          </button>
+          <button class="nav-btn" data-tab="tab-apply" id="navApplyBtn">
+            <span class="nav-icon">✍️</span> 지원서 작성
+          </button>
+          <button class="nav-btn" data-tab="tab-my-apps">
+            <span class="nav-icon">📋</span> 내 지원서 관리
+            <span class="nav-badge" id="myAppsBadge">0</span>
+          </button>
+          <button class="nav-btn admin-btn" data-tab="tab-admin">
+            <span class="nav-icon">🛡️</span> 동아리 관리자
+          </button>
+        </nav>
+
+        <div class="header-actions">
+          <button class="btn btn-outline" id="btnHtmlGuide">
+            💡 HTML 폼 가이드
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- 메인 컨테이너 -->
+    <main class="main-content">
+      <!-- 1. 동아리 탐색 탭 -->
+      <section id="tab-explore" class="tab-pane active">
+        <!-- 히어로 배너 -->
+        <div class="hero-banner">
+          <div class="hero-content">
+            <div class="hero-tag">2026학년도 2학기 신입 부원 대모집</div>
+            <h1 class="hero-title">나의 대학 생활을 빛낼<br><span class="text-highlight">최고의 동아리</span>를 찾아보세요</h1>
+            <p class="hero-desc">코딩, 음악, 여행, 창업, 봉사까지! 전국의 다양한 동아리를 비교하고 표준 온라인 지원서로 손쉽게 지원하세요.</p>
+            <div class="hero-stats">
+              <div class="stat-pill"><strong id="statTotalClubs">6</strong>개 동아리 등록됨</div>
+              <div class="stat-pill"><strong id="statRecruitingClubs">5</strong>개 모집 진행중</div>
+              <div class="stat-pill"><strong id="statTotalApplicants">4</strong>명 지원 완료</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 필터 및 검색 바 -->
+        <div class="filter-card">
+          <div class="filter-row">
+            <div class="search-input-wrap">
+              <span class="search-icon">🔎</span>
+              <input type="text" id="clubSearchInput" placeholder="동아리 이름, 활동 키워드 검색 (예: 코딩, 밴드, 배낭여행)" />
+              <button class="search-clear" id="clubSearchClear" style="display: none;">✕</button>
+            </div>
+
+            <div class="filter-select-group">
+              <select id="filterCategory" class="filter-select">
+                <option value="all">전체 분야 (All)</option>
+                <option value="coding">코딩 (Coding)</option>
+                <option value="music">음악 (Music)</option>
+                <option value="travel">여행 (Travel)</option>
+                <option value="startup">창업/경영 (Startup)</option>
+                <option value="volunteer">봉사 (Volunteer)</option>
+                <option value="sports">체육/레저 (Sports)</option>
+              </select>
+
+              <select id="filterCity" class="filter-select">
+                <option value="all">전체 지역 (City)</option>
+                <option value="seoul">서울</option>
+                <option value="gyeonggi">경기</option>
+                <option value="incheon">인천</option>
+                <option value="busan">부산</option>
+                <option value="daegu">대구</option>
+                <option value="gwangju">광주</option>
+                <option value="daejeon">대전</option>
+                <option value="ulsan">울산</option>
+                <option value="jeju">제주</option>
+                <option value="gangwon">강원</option>
+                <option value="chungbuk">충북</option>
+                <option value="chungnam">충남</option>
+              </select>
+
+              <select id="filterSchool" class="filter-select">
+                <option value="all">전체 대학교 (School)</option>
+                <option value="snu">서울대학교</option>
+                <option value="cau">중앙대학교</option>
+                <option value="ssu">숭실대학교</option>
+                <option value="yonsei">연세대학교</option>
+                <option value="korea">고려대학교</option>
+                <option value="all-uni">연합(전체 대학)</option>
+              </select>
+
+              <button class="btn btn-secondary" id="btnResetFilters">필터 초기화</button>
+            </div>
+          </div>
+
+          <!-- 카테고리 퀵 칩 -->
+          <div class="category-chips" id="categoryChips">
+            <button class="chip active" data-category="all">전체</button>
+            <button class="chip" data-category="coding">💻 코딩</button>
+            <button class="chip" data-category="music">🎸 음악</button>
+            <button class="chip" data-category="travel">✈️ 여행</button>
+            <button class="chip" data-category="startup">🚀 창업</button>
+            <button class="chip" data-category="volunteer">🤝 봉사</button>
+            <button class="chip" data-category="sports">🧗 체육</button>
+          </div>
+        </div>
+
+        <!-- 동아리 카드 목록 그리드 -->
+        <div class="clubs-section">
+          <div class="section-header-flex">
+            <h2>모집 중인 동아리 목록 (<span id="clubsCount">6</span>)</h2>
+            <div class="sorting-note">※ 동아리 카드를 클릭하면 상세 정보와 함께 바로 지원서를 작성할 수 있습니다.</div>
+          </div>
+          <div class="clubs-grid" id="clubsGrid">
+            <!-- 자바스크립트로 렌더링 -->
+          </div>
+          <div id="noClubsNotice" class="empty-state" style="display: none;">
+            <div class="empty-icon">📂</div>
+            <h3>일치하는 동아리가 없습니다</h3>
+            <p>검색어나 필터 조건을 변경해보세요.</p>
+            <button class="btn btn-primary" id="btnResetSearch">필터 초기화</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. 지원서 작성 탭 -->
+      <section id="tab-apply" class="tab-pane">
+        <div class="form-page-container">
+          <div class="form-header-box">
+            <div class="form-club-selector">
+              <label for="applyClubSelect" class="form-label font-bold">지원할 동아리 선택:</label>
+              <select id="applyClubSelect" class="form-select club-picker">
+                <!-- 자바스크립트로 동아리 목록 주입 -->
+              </select>
+            </div>
+            <div class="form-banner-info" id="selectedClubInfoBanner">
+              <span class="badge badge-info" id="bannerClubCat">코딩/IT</span>
+              <h2 id="bannerClubName">코드트리 (CodeTree)</h2>
+              <p id="bannerClubDesc">아이디어를 현실의 서비스로 빌드하는 수도권 연합 개발 동아리</p>
+            </div>
+          </div>
+
+          <!-- 사용자 요청 HTML 폼 구조를 완벽 반영한 온라인 지원서 -->
+          <div class="application-form-wrapper">
+            <div class="form-title-bar">
+              <h2>동아리 입부 지원서 (Application Form)</h2>
+              <p class="form-subtitle">아래 항목을 정확히 작성하신 후 [신청하기] 버튼을 눌러주세요.</p>
+            </div>
+
+            <form id="clubApplicationForm" novalidate>
+              <input type="hidden" id="formClubId" name="clubId" value="club-codetree" />
+              <input type="hidden" id="formClubName" name="clubName" value="코드트리 (CodeTree)" />
+
+              <!-- === 1. 텍스트 입력 === -->
+              <div class="form-section">
+                <h3 class="section-title"><span class="num-badge">1</span> 기본 텍스트 입력</h3>
+                
+                <div class="form-grid-2">
+                  <div class="form-group">
+                    <label for="name">Name (성명) <span class="required-star">*</span></label>
+                    <input type="text" id="name" name="name" placeholder="홍길동" required autocomplete="name">
+                    <span class="field-hint">실명을 입력해주세요.</span>
+                  </div>
+
+                  <!-- type="email" : 이메일 형식( @ 포함)이 아니면 제출 시 브라우저가 경고 -->
+                  <div class="form-group">
+                    <label for="email">Email (이메일) <span class="required-star">*</span></label>
+                    <input type="email" id="email" name="email" placeholder="example@university.ac.kr" required autocomplete="email">
+                    <span class="field-hint">합격 안내 및 면접 일정이 이메일로 전송됩니다.</span>
+                  </div>
+                </div>
+
+                <div class="form-grid-2">
+                  <!-- type="password" : 입력된 값을 *로 표시 -->
+                  <div class="form-group">
+                    <label for="password">Password (지원서 조회/수정용 비밀번호) <span class="required-star">*</span></label>
+                    <div class="password-input-wrap">
+                      <input type="password" id="password" name="password" placeholder="비밀번호 (4자 이상 권장)" required autocomplete="new-password">
+                      <button type="button" class="btn-toggle-pw" id="btnTogglePassword" title="비밀번호 보기/숨기기">👁️</button>
+                    </div>
+                    <span class="field-hint">추후 [내 지원서 관리]에서 결과를 조회하거나 수정할 때 사용됩니다.</span>
+                  </div>
+
+                  <!-- type="tel" : 전화번호 입력, 모바일에서는 숫자 키패드가 뜸 -->
+                  <div class="form-group">
+                    <label for="phone">Phone (연락처) <span class="required-star">*</span></label>
+                    <input type="tel" id="phone" name="phone" placeholder="010-1234-5678" maxlength="13" required autocomplete="tel">
+                    <span class="field-hint">숫자 입력 시 하이픈(-)이 자동으로 적용됩니다.</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- === 2. 숫자 / 날짜 입력 === -->
+              <div class="form-section">
+                <h3 class="section-title"><span class="num-badge">2</span> 숫자 및 날짜 입력</h3>
+                
+                <div class="form-grid-2">
+                  <!-- type="number" : 숫자만 입력 가능 -->
+                  <div class="form-group">
+                    <label for="age">Age (나이) <span class="required-star">*</span></label>
+                    <input type="number" id="age" name="age" min="1" max="120" placeholder="20" required>
+                    <span class="field-hint">만 나이 또는 한국 나이를 숫자로만 입력 (min=1, max=120)</span>
+                  </div>
+
+                  <!-- type="date" : 달력 선택기가 나타남 -->
+                  <div class="form-group">
+                    <label for="birthdate">Birth Date (생년월일) <span class="required-star">*</span></label>
+                    <input type="date" id="birthdate" name="birthdate" required>
+                    <span class="field-hint">달력 아이콘을 눌러 생년월일을 선택하세요.</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- === 3. 선택 입력 === -->
+              <div class="form-section">
+                <h3 class="section-title"><span class="num-badge">3</span> 선택 입력 (성별, 관심분야, 지역, 학교)</h3>
+
+                <!-- 
+                    <fieldset> : 관련된 입력 요소들을 그룹화(테두리가 생김)
+                    <legend> : 그룹화된 입력 요소들의 제목
+                -->
+                <!-- type="radio" : 라디오 버튼, 하나만 선택 가능 -->
+                <!-- name 속성 값이 같아야 하나만 선택 가능 -->
+                <!-- value 속성은 서버로 전송될 값 -->
+                <fieldset class="form-fieldset">
+                  <legend>성별을 선택하세요 (단일 선택)</legend>
+                  <div class="radio-group">
+                    <label class="radio-label" for="male">
+                      <input type="radio" id="male" name="gender" value="male" checked>
+                      <span class="radio-custom"></span>
+                      <span class="label-text">Male (남성)</span>
+                    </label>
+                    <label class="radio-label" for="female">
+                      <input type="radio" id="female" name="gender" value="female">
+                      <span class="radio-custom"></span>
+                      <span class="label-text">Female (여성)</span>
+                    </label>
+                  </div>
+                </fieldset>
+
+                <!-- type="checkbox" : 체크박스, 여러 개 선택 가능 -->
+                <!-- name 속성 값이 같아야 여러 개 선택 가능 -->
+                <fieldset class="form-fieldset">
+                  <legend>관심 분야를 선택하세요 (복수 선택 가능)</legend>
+                  <div class="checkbox-group">
+                    <label class="checkbox-label" for="coding">
+                      <input type="checkbox" id="coding" name="interests" value="코딩" checked>
+                      <span class="check-custom"></span>
+                      <span class="label-text">💻 Coding (코딩/개발)</span>
+                    </label>
+                    <label class="checkbox-label" for="music">
+                      <input type="checkbox" id="music" name="interests" value="음악">
+                      <span class="check-custom"></span>
+                      <span class="label-text">🎸 Music (음악/밴드)</span>
+                    </label>
+                    <label class="checkbox-label" for="travel">
+                      <input type="checkbox" id="travel" name="interests" value="여행">
+                      <span class="check-custom"></span>
+                      <span class="label-text">✈️ Travel (여행/탐험)</span>
+                    </label>
+                    <label class="checkbox-label" for="startup">
+                      <input type="checkbox" id="startup" name="interests" value="창업">
+                      <span class="check-custom"></span>
+                      <span class="label-text">🚀 Startup (창업/경영)</span>
+                    </label>
+                    <label class="checkbox-label" for="volunteer">
+                      <input type="checkbox" id="volunteer" name="interests" value="봉사">
+                      <span class="check-custom"></span>
+                      <span class="label-text">🤝 Volunteer (사회봉사)</span>
+                    </label>
+                    <label class="checkbox-label" for="sports">
+                      <input type="checkbox" id="sports" name="interests" value="운동">
+                      <span class="check-custom"></span>
+                      <span class="label-text">🧗 Sports (체육/레저)</span>
+                    </label>
+                  </div>
+                </fieldset>
+
+                <!-- <select> : 드롭다운 리스트, 그 안의 <option>이 각 항목 -->
+                <!-- 첫번째 option의 value를 빈 문자열("")로 두면 "아직 선택 안 함" 상태를 표현할 수 있음 -->
+                <div class="form-grid-2">
+                  <div class="form-group">
+                    <label for="city">City (거주/활동 지역) <span class="required-star">*</span></label>
+                    <select id="city" name="city" required>
+                      <option value="">--선택하세요--</option>
+                      <option value="seoul">서울</option>
+                      <option value="gyeonggi">경기</option>
+                      <option value="incheon">인천</option>
+                      <option value="busan">부산</option>
+                      <option value="daegu">대구</option>
+                      <option value="gwangju">광주</option>
+                      <option value="daejeon">대전</option>
+                      <option value="ulsan">울산</option>
+                      <option value="jeju">제주</option>
+                      <option value="gangwon">강원</option>
+                      <option value="chungbuk">충북</option>
+                      <option value="chungnam">충남</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="school">School (소속 대학교) <span class="required-star">*</span></label>
+                    <select id="school" name="school" required>
+                      <option value="">--선택하세요--</option>
+                      <option value="snu">서울대학교</option>
+                      <option value="cau">중앙대학교</option>
+                      <option value="ssu">숭실대학교</option>
+                      <option value="yonsei">연세대학교</option>
+                      <option value="korea">고려대학교</option>
+                      <option value="skku">성균관대학교</option>
+                      <option value="hanyang">한양대학교</option>
+                      <option value="khu">경희대학교</option>
+                      <option value="other">기타 대학교</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- 학과 및 학년 추가 필드 -->
+                <div class="form-grid-2">
+                  <div class="form-group">
+                    <label for="major">Major (학과 / 전공)</label>
+                    <input type="text" id="major" name="major" placeholder="예: 컴퓨터공학부, 경영학과, 전자전기 등">
+                  </div>
+                  <div class="form-group">
+                    <label for="studentGrade">Grade (학년 / 학적상태)</label>
+                    <select id="studentGrade" name="studentGrade">
+                      <option value="1학년">1학년 (새내기)</option>
+                      <option value="2학년" selected>2학년</option>
+                      <option value="3학년">3학년</option>
+                      <option value="4학년">4학년</option>
+                      <option value="휴학/군휴학">휴학 중</option>
+                      <option value="대학원생">대학원생</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- 포트폴리오 또는 SNS 링크 -->
+                <div class="form-group">
+                  <label for="portfolioUrl">Portfolio / SNS / GitHub (선택)</label>
+                  <input type="url" id="portfolioUrl" name="portfolioUrl" placeholder="https://github.com/... 또는 https://instagram.com/...">
+                </div>
+              </div>
+
+              <!-- 동아리별 맞춤 질문 (동적) -->
+              <div class="form-section" id="customQuestionSection">
+                <h3 class="section-title"><span class="num-badge">★</span> 동아리 특별 질문</h3>
+                <div class="form-group">
+                  <label for="customAnswer" id="customQuestionLabel">가장 관심 있는 활동이나 동아리에서 펼치고 싶은 프로젝트는?</label>
+                  <input type="text" id="customAnswer" name="customAnswer" placeholder="답변을 입력해주세요">
+                </div>
+              </div>
+
+              <!-- 하고싶은 말 (Textarea) -->
+              <div class="form-section">
+                <div class="textarea-header">
+                  <label for="memo" class="form-label font-bold">하고싶은 말 (지원 동기 및 각오) <span class="required-star">*</span></label>
+                  <span class="char-count" id="memoCharCount">0 / 500자</span>
+                </div>
+                <textarea id="memo" name="memo" rows="5" cols="40" placeholder="자유롭게 적어주세요. 동아리에 지원하게 된 계기와 본인의 장점, 활동 각오를 작성해주시면 심사에 큰 도움이 됩니다." required maxlength="500"></textarea>
+                <span class="field-hint">정성껏 작성된 지원서는 합격률이 높아집니다.</span>
+              </div>
+
+              <!-- === 4. 버튼 === -->
+              <!-- type="submit" : 폼 데이터를 서버로 제출 -->
+              <!-- type="reset" : 폼의 모든 입력 값을 초기화 -->
+              <div class="form-actions-bar">
+                <div class="left-actions">
+                  <button type="button" class="btn btn-outline" id="btnSaveDraft">
+                    💾 임시저장
+                  </button>
+                  <button type="button" class="btn btn-outline" id="btnFillDemoData">
+                    ⚡ 예시데이터 자동완성
+                  </button>
+                </div>
+
+                <div class="right-actions">
+                  <button type="reset" value="다시 작성" class="btn btn-secondary" id="btnFormReset">
+                    다시 작성
+                  </button>
+                  <button type="submit" value="신청하기" class="btn btn-primary btn-lg" id="btnFormSubmit">
+                    신청하기
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. 내 지원서 관리 탭 -->
+      <section id="tab-my-apps" class="tab-pane">
+        <div class="my-apps-container">
+          <div class="page-header">
+            <div>
+              <h2>내 지원서 관리 (My Applications)</h2>
+              <p class="text-muted">제출한 지원서의 실시간 심사 현황(서류접수, 서류합격, 면접일정, 최종발표)을 확인하세요.</p>
+            </div>
+            <div class="lookup-box">
+              <input type="email" id="lookupEmail" placeholder="지원 시 입력한 이메일" />
+              <input type="password" id="lookupPassword" placeholder="비밀번호" />
+              <button class="btn btn-primary" id="btnLookupApps">조회하기</button>
+            </div>
+          </div>
+
+          <!-- 지원서 카드 목록 -->
+          <div id="myAppsList" class="my-apps-grid">
+            <!-- 자바스크립트로 렌더링 -->
+          </div>
+
+          <div id="noMyAppsNotice" class="empty-state" style="display: none;">
+            <div class="empty-icon">📝</div>
+            <h3>제출된 지원서가 없습니다</h3>
+            <p>관심 있는 동아리를 선택하여 온라인 지원서를 작성해보세요!</p>
+            <button class="btn btn-primary" id="btnGoToExplore">동아리 둘러보기</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. 동아리 관리자 탭 -->
+      <section id="tab-admin" class="tab-pane">
+        <div class="admin-container">
+          <div class="admin-top-bar">
+            <div class="admin-title-wrap">
+              <h2>동아리 운영진 관리자 센터 (Admin Dashboard)</h2>
+              <p class="text-muted">접수된 지원서를 심사하고 합격 여부 및 면접 일정을 지원자에게 즉시 공지하세요.</p>
+            </div>
+
+            <div class="admin-controls">
+              <label for="adminClubSelect" class="font-bold">관리 동아리:</label>
+              <select id="adminClubSelect" class="form-select">
+                <!-- 자바스크립트로 주입 -->
+              </select>
+              <button class="btn btn-outline" id="btnExportCsv">📥 CSV 명단 다운로드</button>
+              <button class="btn btn-primary" id="btnOpenNewClubModal">➕ 새 동아리 등록</button>
+            </div>
+          </div>
+
+          <!-- 통계 카드 -->
+          <div class="admin-stats-grid">
+            <div class="admin-stat-card">
+              <div class="stat-number" id="adminStatTotal">0</div>
+              <div class="stat-label">총 지원자 수</div>
+            </div>
+            <div class="admin-stat-card border-blue">
+              <div class="stat-number text-blue" id="adminStatSubmitted">0</div>
+              <div class="stat-label">서류 심사 대기</div>
+            </div>
+            <div class="admin-stat-card border-purple">
+              <div class="stat-number text-purple" id="adminStatInterview">0</div>
+              <div class="stat-label">면접 진행자</div>
+            </div>
+            <div class="admin-stat-card border-green">
+              <div class="stat-number text-green" id="adminStatPassed">0</div>
+              <div class="stat-label">최종 선발자</div>
+            </div>
+          </div>
+
+          <!-- 필터 및 검색 바 -->
+          <div class="admin-filter-bar">
+            <div class="admin-search-wrap">
+              <input type="text" id="adminSearchInput" placeholder="지원자 이름, 학교, 학과 검색..." />
+            </div>
+            <div class="admin-status-filters" id="adminStatusFilters">
+              <button class="status-filter-btn active" data-status="all">전체보기</button>
+              <button class="status-filter-btn" data-status="submitted">서류대기</button>
+              <button class="status-filter-btn" data-status="document_pass">서류합격</button>
+              <button class="status-filter-btn" data-status="interview_scheduled">면접확정</button>
+              <button class="status-filter-btn" data-status="final_pass">최종합격</button>
+              <button class="status-filter-btn" data-status="fail">불합격</button>
+            </div>
+          </div>
+
+          <!-- 지원자 목록 테이블 -->
+          <div class="admin-table-card">
+            <div class="table-responsive">
+              <table class="admin-table" id="adminApplicantsTable">
+                <thead>
+                  <tr>
+                    <th>지원번호</th>
+                    <th>이름 (성별/나이)</th>
+                    <th>학교 / 학과</th>
+                    <th>연락처 / 이메일</th>
+                    <th>관심 분야</th>
+                    <th>지원일시</th>
+                    <th>진행 상태</th>
+                    <th>평가 관리</th>
+                  </tr>
+                </thead>
+                <tbody id="adminTableBody">
+                  <!-- 자바스크립트로 주입 -->
+                </tbody>
+              </table>
+            </div>
+
+            <div id="adminEmptyNotice" class="empty-state" style="display: none; padding: 40px 20px;">
+              <div class="empty-icon">👥</div>
+              <h3>해당 조건의 지원자가 없습니다</h3>
+              <p>필터를 변경하거나 새 지원서가 접수될 때까지 기다려주세요.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- 모달: 동아리 상세 정보 -->
+    <div class="modal-backdrop" id="clubDetailModal" style="display: none;">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="modal-header-title">
+              <span class="badge" id="modalClubCategory">분야</span>
+              <h2 id="modalClubName">동아리 이름</h2>
+            </div>
+            <button class="modal-close" id="btnCloseClubModal">✕</button>
+          </div>
+          <div class="modal-body" id="modalClubBody">
+            <!-- 자바스크립트로 주입 -->
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" id="btnCloseClubModal2">닫기</button>
+            <button class="btn btn-primary" id="btnApplyFromModal">이 동아리에 지원하기 ✍️</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 모달: 지원서 상세 및 심사 평가 (관리자용) -->
+    <div class="modal-backdrop" id="applicantReviewModal" style="display: none;">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="modal-header-title">
+              <span class="badge badge-info" id="revModalAppId">APP-000</span>
+              <h2 id="revModalApplicantName">김민준 지원서 심사</h2>
+            </div>
+            <button class="modal-close" id="btnCloseReviewModal">✕</button>
+          </div>
+          <div class="modal-body" id="revModalBody">
+            <!-- 자바스크립트로 주입 -->
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" id="btnCloseReviewModal2">닫기</button>
+            <button class="btn btn-outline" id="btnPrintApplication">🖨️ 지원서 인쇄</button>
+            <button class="btn btn-primary" id="btnSaveApplicantEvaluation">평가 저장 완료</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 모달: HTML 폼 가이드 학습 뷰어 -->
+    <div class="modal-backdrop" id="htmlGuideModal" style="display: none;">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="modal-header-title">
+              <span class="badge badge-success">HTML 폼 핵심 요소 레퍼런스</span>
+              <h2>HTML Form 태그와 입력 요소 완벽 가이드</h2>
+            </div>
+            <button class="modal-close" id="btnCloseHtmlGuide">✕</button>
+          </div>
+          <div class="modal-body">
+            <div class="guide-grid">
+              <div class="guide-card">
+                <h4>1. 텍스트 입력 (&lt;input type="..."&gt;)</h4>
+                <ul>
+                  <li><code>type="text"</code>: 성명 등 단문 텍스트 입력</li>
+                  <li><code>type="email"</code>: 이메일 형식(@ 및 도메인) 자동 유효성 검사</li>
+                  <li><code>type="password"</code>: 보안을 위해 입력값을 마스킹(*) 처리</li>
+                  <li><code>type="tel"</code>: 전화번호 입력, 모바일에서 숫자 키패드 호출</li>
+                </ul>
+              </div>
+
+              <div class="guide-card">
+                <h4>2. 숫자 / 날짜 입력</h4>
+                <ul>
+                  <li><code>type="number"</code>: 숫자만 입력 가능 (min="1" max="120" 범위 제한)</li>
+                  <li><code>type="date"</code>: 브라우저 내장 달력 팝업으로 날짜 간편 선택</li>
+                </ul>
+              </div>
+
+              <div class="guide-card">
+                <h4>3. 선택 요소 (&lt;fieldset&gt;, &lt;select&gt;)</h4>
+                <ul>
+                  <li><code>&lt;fieldset&gt; / &lt;legend&gt;</code>: 연관된 입력 요소를 그룹화하고 테두리/제목 부여</li>
+                  <li><code>type="radio"</code>: 동일 name 그룹 중 단 하나만 선택 (예: 성별 Male/Female)</li>
+                  <li><code>type="checkbox"</code>: 다중 선택 지원 (예: 코딩, 음악, 여행 등 관심분야)</li>
+                  <li><code>&lt;select&gt; / &lt;option&gt;</code>: 드롭다운 목록 (지역, 대학교 선택)</li>
+                </ul>
+              </div>
+
+              <div class="guide-card">
+                <h4>4. 장문 입력 및 제어 버튼</h4>
+                <ul>
+                  <li><code>&lt;textarea rows="4" cols="40"&gt;</code>: 하고싶은 말 등 다중 라인 장문 입력</li>
+                  <li><code>type="submit"</code>: 폼의 입력 데이터를 수집하여 처리</li>
+                  <li><code>type="reset"</code>: 폼의 모든 입력란을 초기 상태로 리셋</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-primary" id="btnCloseHtmlGuide2">확인 완료</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 모달: 신규 동아리 등록 -->
+    <div class="modal-backdrop" id="newClubModal" style="display: none;">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2>신규 동아리 등록 (모집 공고 생성)</h2>
+            <button class="modal-close" id="btnCloseNewClubModal">✕</button>
+          </div>
+          <div class="modal-body">
+            <form id="newClubForm">
+              <div class="form-group">
+                <label for="newClubName">동아리명 <span class="required-star">*</span></label>
+                <input type="text" id="newClubName" required placeholder="예: 대학생 알고리즘 스터디">
+              </div>
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label for="newClubCategory">분야 <span class="required-star">*</span></label>
+                  <select id="newClubCategory" required>
+                    <option value="coding">코딩/IT</option>
+                    <option value="music">음악/밴드</option>
+                    <option value="travel">여행/탐험</option>
+                    <option value="startup">창업/경영</option>
+                    <option value="volunteer">봉사</option>
+                    <option value="sports">체육/레저</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="newClubCity">활동 지역 <span class="required-star">*</span></label>
+                  <select id="newClubCity" required>
+                    <option value="seoul">서울</option>
+                    <option value="gyeonggi">경기</option>
+                    <option value="incheon">인천</option>
+                    <option value="busan">부산</option>
+                    <option value="daegu">대구</option>
+                    <option value="other">기타</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="newClubTagline">한 줄 소개 <span class="required-star">*</span></label>
+                <input type="text" id="newClubTagline" required placeholder="열정 가득한 동아리원을 모집합니다!">
+              </div>
+              <div class="form-group">
+                <label for="newClubDesc">상세 소개 <span class="required-star">*</span></label>
+                <textarea id="newClubDesc" rows="3" required placeholder="동아리 활동 내용, 정기 모임 일정, 혜택 등을 적어주세요."></textarea>
+              </div>
+              <div class="modal-footer" style="padding: 16px 0 0 0;">
+                <button type="button" class="btn btn-secondary" id="btnCancelNewClub">취소</button>
+                <button type="submit" class="btn btn-primary">동아리 개설하기</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 토스트 알림 컨테이너 -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- 메인 자바스크립트 모듈 로드 -->
+    <script type="module" src="/src/app.js"></script>
+  </body>
+</html>
